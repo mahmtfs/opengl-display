@@ -20,5 +20,21 @@ include_directories(libs/nanogui/include)
 include_directories(${NANOGUI_EXTRA_INCS})
 add_definitions(${NANOGUI_EXTRA_DEFS})
 
-add_executable(${PROJECT_NAME} main.cpp)
+include_directories(libs/glm)
+add_subdirectory(libs/glm)
+
+set(INCLUDES_DIR "includes")
+include_directories(${INCLUDES_DIR})
+
+add_executable(${PROJECT_NAME} main.cpp 
+                ${INCLUDES_DIR}/graphics/graphics.cpp
+                ${INCLUDES_DIR}/shader/shader.cpp)
 target_link_libraries(${PROJECT_NAME} nanogui ${NANOGUI_EXTRA_LIBS})
+
+add_custom_target(copy_shaders ALL
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/shaders
+                ${OUTPUT_DIR}/shaders
+                COMMENT "Copying shaders...") 
+
+add_dependencies(${PROJECT_NAME} copy_shaders)
