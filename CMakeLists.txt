@@ -28,7 +28,8 @@ include_directories(${INCLUDES_DIR})
 
 add_executable(${PROJECT_NAME} main.cpp 
                 ${INCLUDES_DIR}/graphics/graphics.cpp
-                ${INCLUDES_DIR}/shader/shader.cpp)
+                ${INCLUDES_DIR}/shader/shader.cpp
+                ${INCLUDES_DIR}/importer/importer.cpp)
 target_link_libraries(${PROJECT_NAME} nanogui ${NANOGUI_EXTRA_LIBS})
 
 add_custom_target(copy_shaders ALL
@@ -37,4 +38,18 @@ add_custom_target(copy_shaders ALL
                 ${OUTPUT_DIR}/shaders
                 COMMENT "Copying shaders...") 
 
+add_custom_target(copy_models ALL
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/models
+                ${OUTPUT_DIR}/models
+                COMMENT "Copying models...") 
+
+add_custom_target(copy_textures ALL
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/textures
+                ${OUTPUT_DIR}/textures
+                COMMENT "Copying textures...")
+
 add_dependencies(${PROJECT_NAME} copy_shaders)
+add_dependencies(${PROJECT_NAME} copy_models)
+add_dependencies(${PROJECT_NAME} copy_textures)
