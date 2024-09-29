@@ -23,14 +23,21 @@ add_definitions(${NANOGUI_EXTRA_DEFS})
 include_directories(libs/glm)
 add_subdirectory(libs/glm)
 
+set(ASSIMP_WARNINGS_AS_ERRORS  OFF CACHE BOOL " " FORCE)
+set(ASSIMP_INSTALL            OFF CACHE BOOL " " FORCE)
+
+include_directories(libs/assimp)
+add_subdirectory(libs/assimp)
+include_directories(libs/assimp/include)
+
 set(INCLUDES_DIR "includes")
 include_directories(${INCLUDES_DIR})
 
 add_executable(${PROJECT_NAME} main.cpp 
                 ${INCLUDES_DIR}/graphics/graphics.cpp
-                ${INCLUDES_DIR}/shader/shader.cpp
-                ${INCLUDES_DIR}/importer/importer.cpp)
+                ${INCLUDES_DIR}/shader/shader.cpp)
 target_link_libraries(${PROJECT_NAME} nanogui ${NANOGUI_EXTRA_LIBS})
+target_link_libraries(${PROJECT_NAME} assimp::assimp)
 
 add_custom_target(copy_shaders ALL
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
